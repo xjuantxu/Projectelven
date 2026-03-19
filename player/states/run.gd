@@ -9,6 +9,7 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
+	#reproducir animacion
 	pass
 
 
@@ -19,14 +20,21 @@ func exit() -> void:
 
 #¿Qué pasa si se pulsa un input?
 func handle_input( _event : InputEvent ) -> PlayerState:
+	if _event.is_action_pressed("jump"):
+		return jump
 	return next_state
 
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
+	if player.direction.x == 0:
+		return idle
 	return next_state
 
 
 #¿Qué pasa en cada tick de proceso físico en este estado? 
 func physics_process (_delta: float) -> PlayerState:
+	player.velocity.x = player.direction.x * player.move_speed
+	if player.is_on_floor() == false:
+		return fall
 	return next_state

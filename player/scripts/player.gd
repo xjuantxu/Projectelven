@@ -1,17 +1,19 @@
 class_name Player extends CharacterBody2D
 
+#region /// variables exportadas
+@export var move_speed : float = 100
+@export var jump_velocity : float = -300
 
 #region /// variables de la máquina de estados
-var states : Array[ PlayerState ]
-var current_state : PlayerState : 
-	get : return states.front()
-var previous_state : PlayerState :
-	get : return states[ 1 ]
+var states : Array[ PlayerState ] = []
+var current_state : PlayerState
+var previous_state : PlayerState
 #endregion
 
 #region /// variables estándar
-var direction : Vector2 = Vector2 (0,0)
-var gravity : float = 9.8
+var direction : Vector2 = Vector2.ZERO
+var gravity : float = 980
+var rotation_speed : float = 10.0
 #endregion
 
 
@@ -22,7 +24,9 @@ func _ready() -> void:
 
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	if current_state == null:
+		return
 	change_state( current_state.handle_input( event ) )
 	pass
 
@@ -32,14 +36,21 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process( _delta: float) -> void:
 	update_direction()
+	if current_state == null:
+		return
 	change_state( current_state.process( _delta ) )
 	pass
 
 
 func _physics_process( _delta: float) -> void:
 	velocity.y += gravity * _delta
+	if current_state == null:
+		move_and_slide()
+		update_ground_rotation( _delta )
+		return
 	change_state( current_state.physics_process( _delta ) )
 	move_and_slide()
+	update_ground_rotation( _delta )
 	pass
 
 
@@ -55,13 +66,10 @@ func initialize_states() -> void:
 	if states.size() == 0:
 		return 
 
-	#iniciar cada estado
-	for state in states:
-		state._init()
-
 	#configurar el estado inicial
-	change_state ( current_state )
+	current_state = states[0]
 	current_state.enter()
+	$Label.text = current_state.name
 	pass
 
 
@@ -74,17 +82,28 @@ func change_state( new_state : PlayerState ) -> void:
 	if current_state:
 		current_state.exit()
 
-	states.push_front( new_state )
+	previous_state = current_state
+	current_state = new_state
 	current_state.enter()
-	states.resize( 3 )
+	$Label.text = current_state.name
 	pass
 
 
 
 func update_direction() -> void:
-
 	#var prev_direction : Vector2 = direction
-	direction = Input.get_vector( "ui_left", "ui_right", "ui_up", "ui_down" )
-
+	var x_axis = Input.get_axis("left", "right")
+	var y_axis = Input.get_axis("jump", "crouch")
+	direction = Vector2( x_axis, y_axis )
 	#más cosas que hacer
 	pass
+
+
+func update_ground_rotation( delta : float ) -> void:
+	if is_on_floor():
+		var floor_normal := get_floor_normal()
+		var target_rotation := floor_normal.angle() + deg_to_rad( 90 )
+		rotation = lerp_angle( rotation, target_rotation, rotation_speed * delta )
+		return
+
+	rotation = lerp_angle( rotation, 0.0, rotation_speed * delta )

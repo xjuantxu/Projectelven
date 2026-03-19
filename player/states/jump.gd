@@ -1,16 +1,8 @@
 @icon ("res://player/states/state.svg")
-class_name PlayerState extends Node
+class_name PlayerStateJump extends PlayerState
 
-var player : Player
-var next_state : PlayerState
-
-#region /// Referencias de estado
-@onready var idle : PlayerState = get_node("../Idle")
-@onready var run : PlayerState = get_node("../Run")
-@onready var jump : PlayerState = get_node("../Jump")
-@onready var fall : PlayerState = get_node("../Fall")
-
-#endregion
+@export var jump_velocity : float = 450.0
+var started_falling : bool = false
 
 
 #¿Qué pasa si se inicia este estado?
@@ -20,6 +12,9 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
+	#reproducir animacion
+	started_falling = false
+	player.velocity.y = -jump_velocity
 	pass
 
 
@@ -35,9 +30,18 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
+
 	return next_state
 
 
 #¿Qué pasa en cada tick de proceso físico en este estado? 
 func physics_process (_delta: float) -> PlayerState:
-	return next_state
+	player.velocity.x = player.direction.x * player.move_speed
+
+	if player.velocity.y >= 0:
+		started_falling = true
+
+	if started_falling:
+		return fall
+
+	return null
