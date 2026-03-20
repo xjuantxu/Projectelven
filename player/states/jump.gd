@@ -13,6 +13,7 @@ func _init() -> void:
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
 	#reproducir animacion
+	player.add_debug_jump_indicator( Color.LIME_GREEN )
 	started_falling = false
 	player.velocity.y = -jump_velocity
 	pass
@@ -20,11 +21,15 @@ func enter() -> void:
 
 #¿Qué pasa si salimos de este estado?
 func exit() -> void:
+	player.add_debug_jump_indicator( Color.YELLOW )
 	pass
 
 
 #¿Qué pasa si se pulsa un input?
-func handle_input( _event : InputEvent ) -> PlayerState:
+func handle_input( _event : InputEvent ) -> PlayerState :
+	if _event.is_action_released("jump") :
+		player.velocity.y *= 0.5
+		return fall
 	return next_state
 
 

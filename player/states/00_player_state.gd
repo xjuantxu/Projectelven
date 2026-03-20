@@ -9,7 +9,7 @@ var next_state : PlayerState
 @onready var run : PlayerState = get_node("../Run")
 @onready var jump : PlayerState = get_node("../Jump")
 @onready var fall : PlayerState = get_node("../Fall")
-
+@onready var crouch : PlayerState = get_node("../Crouch")
 #endregion
 
 

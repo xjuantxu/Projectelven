@@ -30,6 +30,8 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
+	if player.direction.y > 0.5:
+		return crouch
 	if player.direction.x != 0:
 		return run
 	return null

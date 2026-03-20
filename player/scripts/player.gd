@@ -1,8 +1,17 @@
 class_name Player extends CharacterBody2D
 
+const DEBUG_JUMP_INDICATOR = preload("res://player/debug_jump_indicator.tscn")
+
+#region /// variables onready var 
+@onready var sprite : Sprite2D = $Sprite2D
+@onready var collision_stand : CollisionShape2D = $CollisionStand
+@onready var collision_crouch : CollisionShape2D = $CollisionCrouch
+#endregion
+
 #region /// variables exportadas
 @export var move_speed : float = 100
 @export var jump_velocity : float = -300
+#endregion
 
 #region /// variables de la máquina de estados
 var states : Array[ PlayerState ] = []
@@ -14,6 +23,7 @@ var previous_state : PlayerState
 var direction : Vector2 = Vector2.ZERO
 var gravity : float = 980
 var rotation_speed : float = 10.0
+var gravity_multiplier : float = 1.0
 #endregion
 
 
@@ -43,7 +53,7 @@ func _process( _delta: float) -> void:
 
 
 func _physics_process( _delta: float) -> void:
-	velocity.y += gravity * _delta
+	velocity.y += gravity * _delta * gravity_multiplier
 	if current_state == null:
 		move_and_slide()
 		update_ground_rotation( _delta )
@@ -100,6 +110,9 @@ func update_direction() -> void:
 
 
 func update_ground_rotation( delta : float ) -> void:
+	if current_state is PlayerStateCrouch:
+		return
+
 	if is_on_floor():
 		var floor_normal := get_floor_normal()
 		var target_rotation := floor_normal.angle() + deg_to_rad( 90 )
@@ -107,3 +120,12 @@ func update_ground_rotation( delta : float ) -> void:
 		return
 
 	rotation = lerp_angle( rotation, 0.0, rotation_speed * delta )
+
+func add_debug_jump_indicator( color : Color = Color.RED) -> void:
+	var d : Node2D = DEBUG_JUMP_INDICATOR.instantiate()
+	get_tree().root.add_child( d )
+	d.global_position = global_position
+	d.modulate = color
+	await get_tree().create_timer( 3.0 ).timeout
+	d.queue_free()
+	pass

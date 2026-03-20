@@ -5,37 +5,21 @@
 [ext_resource type="Script" uid="uid://d1g0juj3bq4xa" path="res://player/states/run.gd" id="3_83hs8"]
 [ext_resource type="Script" uid="uid://bc3l3pwslqhts" path="res://player/states/jump.gd" id="4_qjkh3"]
 [ext_resource type="Script" uid="uid://bajd5keoyhwvj" path="res://player/states/fall.gd" id="5_g6k8r"]
+[ext_resource type="Script" uid="uid://ynbritowqyhk" path="res://player/states/crouch.gd" id="6_g6k8r"]
 
-[sub_resource type="Gradient" id="Gradient_5q5h1"]
-colors = PackedColorArray(0.7753153, 0.18617243, 0, 1, 0.72156864, 0.48235294, 0, 1)
+[sub_resource type="Gradient" id="Gradient_g6k8r"]
+colors = PackedColorArray(0.94509804, 0, 0, 1, 0.8361973, 0.5976833, 3.85046e-07, 1)
 
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_p0vlq"]
-gradient = SubResource("Gradient_5q5h1")
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_boad6"]
+gradient = SubResource("Gradient_g6k8r")
 width = 18
 height = 48
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ehsmr"]
 size = Vector2(16, 46)
 
-[sub_resource type="Gradient" id="Gradient_qjkh3"]
-offsets = PackedFloat32Array(0.46067417, 1)
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_g6k8r"]
-gradient = SubResource("Gradient_qjkh3")
-width = 5
-height = 5
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-
-[sub_resource type="Gradient" id="Gradient_boad6"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_rgyib"]
-gradient = SubResource("Gradient_boad6")
-width = 12
-height = 1
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g6k8r"]
+size = Vector2(16, 30)
 
 [node name="Player" type="CharacterBody2D" unique_id=797509030]
 script = ExtResource("1_ulp21")
@@ -58,13 +42,23 @@ script = ExtResource("4_qjkh3")
 unique_name_in_owner = true
 script = ExtResource("5_g6k8r")
 
+[node name="Crouch" type="Node" parent="States" unique_id=381074581]
+unique_name_in_owner = true
+script = ExtResource("6_g6k8r")
+
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1611318057]
 position = Vector2(0, -24)
-texture = SubResource("GradientTexture2D_p0vlq")
+texture = SubResource("GradientTexture2D_boad6")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=348846941]
+[node name="CollisionStand" type="CollisionShape2D" parent="." unique_id=348846941]
 position = Vector2(0, -23)
 shape = SubResource("RectangleShape2D_ehsmr")
+
+[node name="CollisionCrouch" type="CollisionShape2D" parent="." unique_id=822087949]
+position = Vector2(0, -15)
+shape = SubResource("RectangleShape2D_g6k8r")
+disabled = true
+debug_color = Color(0, 0.91764706, 0.3372549, 0.41960785)
 
 [node name="Label" type="Label" parent="." unique_id=1871582130]
 offset_left = -42.0
@@ -75,14 +69,5 @@ theme_override_font_sizes/font_size = 12
 text = "label"
 horizontal_alignment = 1
 
-[node name="Debug Jump Indicator" type="Node2D" parent="." unique_id=1868761542]
-
-[node name="Sprite2D2" type="Sprite2D" parent="Debug Jump Indicator" unique_id=1717916028]
-texture = SubResource("GradientTexture2D_g6k8r")
-
-[node name="Sprite2D3" type="Sprite2D" parent="Debug Jump Indicator" unique_id=2007909884]
-self_modulate = Color(1, 1, 1, 0.627451)
-texture = SubResource("GradientTexture2D_rgyib")
-
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1527253746]
-zoom = Vector2(2, 2)
+zoom = Vector2(2.5, 2.5)
