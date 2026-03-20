@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="Project Elven"
-run/main_scene="uid://kd12vgke0s7c"
+run/main_scene="uid://da24akc2fh7g4"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
 
-window/stretch/mode="viewport"
+window/size/mode=3
 window/stretch/scale_mode="integer"
 
 [editor]

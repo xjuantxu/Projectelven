@@ -22,7 +22,7 @@ func enter() -> void:
 	#Si lo es, controla el salto de forma retroactiva
 	if player.previous_state == fall and not Input.is_action_pressed("jump"):
 		await get_tree().process_frame
-		player.position.y *=0.5
+		player.velocity.y *=0.5
 		player.change_state(fall)
 		pass
 		

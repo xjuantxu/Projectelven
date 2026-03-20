@@ -47,8 +47,8 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
-	coyote_timer = max(coyote_timer - _delta, 0.0)
-	buffer_timer = max(buffer_timer - _delta, 0.0)
+	coyote_timer -= _delta
+	buffer_timer -= _delta
 	set_jump_frame()
 	return next_state
 
@@ -56,10 +56,10 @@ func process (_delta: float) -> PlayerState:
 #¿Qué pasa en cada tick de proceso físico en este estado? 
 func physics_process (_delta: float) -> PlayerState:
 	if player.is_on_floor():
-		#player.add_debug_jump_indicator()
-		if buffer_timer > 0.0:
-			return jump
 		if player.direction.x == 0:
+			#player.add_debug_jump_indicator()
+			if buffer_timer > 0.0:
+				return jump
 			return idle
 		#player.add_debug_jump_indicator( Color.CYAN )
 		return run
