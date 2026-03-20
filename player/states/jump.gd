@@ -12,7 +12,7 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
-	#reproducir animacion
+	player.animation_player.play("jump")
 	player.add_debug_jump_indicator( Color.LIME_GREEN )
 	started_falling = false
 	player.velocity.y = -jump_velocity

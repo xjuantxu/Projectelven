@@ -73,6 +73,8 @@ scale = Vector2(9.271986, 0.899784)
 texture = SubResource("GradientTexture2D_qchbg")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D12" unique_id=1569161768]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D12/StaticBody2D" unique_id=520311381]
 shape = SubResource("RectangleShape2D_maef2")
@@ -104,6 +106,8 @@ scale = Vector2(12.073026, 0.899784)
 texture = SubResource("GradientTexture2D_q8s1k")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Sprite2D10" unique_id=803313102]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite2D10/StaticBody2D" unique_id=991623481]
 shape = SubResource("RectangleShape2D_maef2")

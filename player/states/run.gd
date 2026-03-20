@@ -9,7 +9,7 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
-	#reproducir animacion
+	player.animation_player.play("run")
 	pass
 
 

@@ -10,11 +10,9 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
-	#reproducir animacion
+	player.animation_player.play("crouch")
 	player.collision_stand.disabled = true
 	player.collision_crouch.disabled = false
-	player.sprite.scale.y = 0.625
-	player.sprite.position.y = -15
 	pass
 
 
@@ -22,14 +20,16 @@ func enter() -> void:
 func exit() -> void:
 	player.collision_stand.disabled = false
 	player.collision_crouch.disabled = true
-	player.sprite.scale.y = 1
-	player.sprite.position.y = -24
 	pass
 
 
 #¿Qué pasa si se pulsa un input?
 func handle_input( _event : InputEvent ) -> PlayerState:
 	if _event.is_action_pressed("jump"):
+		player.one_way_platform_shapecast.force_shapecast_update()
+		if player.one_way_platform_shapecast.is_colliding() == true:
+			player.position.y += 4
+			return fall
 		return jump
 	return null
 

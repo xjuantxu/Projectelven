@@ -15,6 +15,10 @@ run/main_scene="uid://kd12vgke0s7c"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
+[display]
+
+window/stretch/scale_mode="integer"
+
 [editor]
 
 version_control/plugin_name="GitPlugin"
@@ -73,6 +77,11 @@ special={
 , Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":-1,"axis":4,"axis_value":1.0,"script":null)
 ]
 }
+
+[layer_names]
+
+2d_physics/layer_1="Suelo"
+2d_physics/layer_2="Plataformas de salto"
 
 [physics]
 
