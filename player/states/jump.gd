@@ -13,15 +13,25 @@ func _init() -> void:
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
 	player.animation_player.play("jump")
-	player.add_debug_jump_indicator( Color.LIME_GREEN )
+	player.animation_player.pause()
+	#player.add_debug_jump_indicator( Color.LIME_GREEN )
 	started_falling = false
 	player.velocity.y = -jump_velocity
+
+	#Comprobar si este es un salto de buffer
+	#Si lo es, controla el salto de forma retroactiva
+	if player.previous_state == fall and not Input.is_action_pressed("jump"):
+		await get_tree().process_frame
+		player.position.y *=0.5
+		player.change_state(fall)
+		pass
+		
 	pass
 
 
 #¿Qué pasa si salimos de este estado?
 func exit() -> void:
-	player.add_debug_jump_indicator( Color.YELLOW )
+	#player.add_debug_jump_indicator( Color.YELLOW )
 	pass
 
 
@@ -35,7 +45,7 @@ func handle_input( _event : InputEvent ) -> PlayerState :
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
-
+	set_jump_frame()
 	return next_state
 
 
@@ -50,3 +60,10 @@ func physics_process (_delta: float) -> PlayerState:
 		return fall
 
 	return null
+
+
+
+func set_jump_frame() -> void:
+	var frame : float = remap(player.velocity.y, -jump_velocity, 0.0, 0.0, 0.5 )
+	player.animation_player.seek(frame, true)
+	pass

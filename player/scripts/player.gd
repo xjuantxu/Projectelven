@@ -14,6 +14,7 @@ const DEBUG_JUMP_INDICATOR = preload("res://player/debug_jump_indicator.tscn")
 #region /// variables exportadas
 @export var move_speed : float = 100
 @export var jump_velocity : float = -300
+@export var max_fall_velocity : float = 600.0
 #endregion
 
 #region /// variables de la máquina de estados
@@ -32,7 +33,7 @@ var gravity_multiplier : float = 1.0
 
 
 func _ready() -> void:
-	initialize_states()	
+	initialize_states()
 	pass
 
 
@@ -57,6 +58,7 @@ func _process( _delta: float) -> void:
 
 func _physics_process( _delta: float) -> void:
 	velocity.y += gravity * _delta * gravity_multiplier
+	velocity.y = clamp( velocity.y, -1000.0, max_fall_velocity)
 	if current_state == null:
 		move_and_slide()
 		update_ground_rotation( _delta )

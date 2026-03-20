@@ -58,7 +58,6 @@ shape = SubResource("RectangleShape2D_maef2")
 
 [node name="Sprite2D8" type="Sprite2D" parent="." unique_id=336050925]
 position = Vector2(497.99982, 500)
-rotation = -0.0069141984
 scale = Vector2(9.271986, 0.899784)
 texture = SubResource("GradientTexture2D_hddm4")
 
@@ -166,4 +165,4 @@ texture = SubResource("GradientTexture2D_hddm4")
 shape = SubResource("RectangleShape2D_maef2")
 
 [node name="Player" parent="." unique_id=797509030 instance=ExtResource("1_hddm4")]
-position = Vector2(60, 370)
+position = Vector2(396, 486)

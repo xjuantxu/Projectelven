@@ -18,7 +18,8 @@ func _init() -> void:
 
 #¿Qué pasa si se entra a este estado?
 func enter() -> void:
-	#reproducir animacion
+	player.animation_player.play("jump")
+	player.animation_player.pause()
 	player.gravity_multiplier = fall_gravity_multiplier
 	if player.previous_state == jump:
 		coyote_timer = 0
@@ -30,6 +31,7 @@ func enter() -> void:
 #¿Qué pasa si salimos de este estado?
 func exit() -> void:
 	player.gravity_multiplier = 1.0
+	buffer_timer = 0.0
 	pass
 
 
@@ -45,21 +47,29 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 
 #¿Que pasa en cada tick de proceso en este estado?
 func process (_delta: float) -> PlayerState:
-	coyote_timer -= _delta
-	buffer_timer -= _delta
+	coyote_timer = max(coyote_timer - _delta, 0.0)
+	buffer_timer = max(buffer_timer - _delta, 0.0)
+	set_jump_frame()
 	return next_state
 
 
 #¿Qué pasa en cada tick de proceso físico en este estado? 
 func physics_process (_delta: float) -> PlayerState:
 	if player.is_on_floor():
+		#player.add_debug_jump_indicator()
+		if buffer_timer > 0.0:
+			return jump
 		if player.direction.x == 0:
-			player.add_debug_jump_indicator()
-			if buffer_timer > 0.0:
-				return jump
 			return idle
-		player.add_debug_jump_indicator( Color.CYAN )
+		#player.add_debug_jump_indicator( Color.CYAN )
 		return run
 	player.velocity.x = player.direction.x * player.move_speed
 
 	return next_state
+
+
+
+func set_jump_frame() -> void:
+	var frame : float = remap(player.velocity.y, 0.0, player.max_fall_velocity, 0.5, 1.0 )
+	player.animation_player.seek(frame, true)
+	pass
