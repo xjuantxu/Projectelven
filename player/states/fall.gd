@@ -6,9 +6,12 @@ class_name PlayerStateFall extends PlayerState
 @export var fall_gravity_multiplier : float = 1.165
 @export var coyote_time : float = 0.125
 @export var jump_buffer_time : float = 0.2
+@export var crouch_after_long_fall_time : float = 0.5
+@export var crouch_after_long_fall_duration : float = 0.4
 
 var coyote_timer : float = 0.0
 var buffer_timer : float = 0.0
+var fall_timer : float = 0.0
 #endregion
 
 #¿Qué pasa si se inicia este estado?
@@ -21,6 +24,7 @@ func enter() -> void:
 	player.animation_player.play("jump")
 	player.animation_player.pause()
 	player.gravity_multiplier = fall_gravity_multiplier
+	fall_timer = 0.0
 	if player.previous_state == jump:
 		coyote_timer = 0
 	else:
@@ -32,6 +36,7 @@ func enter() -> void:
 func exit() -> void:
 	player.gravity_multiplier = 1.0
 	buffer_timer = 0.0
+	fall_timer = 0.0
 	pass
 
 
@@ -49,6 +54,7 @@ func handle_input( _event : InputEvent ) -> PlayerState:
 func process (_delta: float) -> PlayerState:
 	coyote_timer -= _delta
 	buffer_timer -= _delta
+	fall_timer += _delta
 	set_jump_frame()
 	return next_state
 
@@ -60,6 +66,9 @@ func physics_process (_delta: float) -> PlayerState:
 			#player.add_debug_jump_indicator()
 			if buffer_timer > 0.0:
 				return jump
+			if fall_timer >= crouch_after_long_fall_time:
+				crouch.start_forced_crouch(crouch_after_long_fall_duration)
+				return crouch
 			return idle
 		#player.add_debug_jump_indicator( Color.CYAN )
 		return run

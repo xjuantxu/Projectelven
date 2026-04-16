@@ -41,3 +41,7 @@ func process (_delta: float) -> PlayerState:
 #¿Qué pasa en cada tick de proceso físico en este estado? 
 func physics_process (_delta: float) -> PlayerState:
 	return next_state
+
+
+func start_forced_crouch(_duration : float) -> void:
+	pass
